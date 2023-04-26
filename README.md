@@ -1,6 +1,8 @@
 # BadBotnny
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo1.jpg)
 
+![](https://github.com/MickGomez/BadBotnny/blob/main/logo2.jpg)
+
 Bad Botnny beibeee
 
 Sensor Infrarrojo E18-d80nk posee logica negada. Al detectar un objeto manda un 0 (LOW)
