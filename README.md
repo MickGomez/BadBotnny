@@ -3,6 +3,8 @@ Sensor Infrarrojo E18-d80nk posee logica negada. Al detectar un objeto manda un 
 Calibrado a 60 cm, da un 0 (LOW) para distancias mayores a 60cm.
 Logica inversa en todas las lineas de codigo
 
+Driver del motor, funcionamiento básico= https://www.cytron.io/tutorial/controlling-10a-dc-motor-driver-using-arduino-nano
+
 ![](https://github.com/MickGomez/BadBotnny/blob/main/infra.jpg)
 
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo1.jpg)
