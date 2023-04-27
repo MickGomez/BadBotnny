@@ -5,6 +5,8 @@ Logica inversa en todas las lineas de codigo
 
 Driver del motor, funcionamiento básico= https://www.cytron.io/tutorial/controlling-10a-dc-motor-driver-using-arduino-nano
 
+Giroscopio = https://github.com/GavinsMJ/MPU6050-Motion-and-Collision-detection
+
 ![](https://github.com/MickGomez/BadBotnny/blob/main/infra.jpg)
 
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo1.jpg)
