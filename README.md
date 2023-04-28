@@ -7,6 +7,8 @@ Driver del motor, funcionamiento básico= https://www.cytron.io/tutorial/control
 
 Giroscopio = https://github.com/GavinsMJ/MPU6050-Motion-and-Collision-detection
 
+Sumobot con PID = http://aprendiendofacilelectronica.blogspot.com/2017/12/robot-minisumo-pid.html
+
 ![](https://github.com/MickGomez/BadBotnny/blob/main/infra.jpg)
 
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo1.jpg)
