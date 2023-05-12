@@ -15,8 +15,8 @@
 #define linea_trasero_izq A2 // Sensor de linea trasero izquierdo
 #define linea_trasero_der A3 // Sensor de linea trasero derecho
 
-#define scl_com A4 // pin para establacer comunicacion giroscopio-placa
-#define sda_com A5 // pin para establacer comunicacion giroscopio-placa
+#define scl_com A5 // pn para establacer comunicacion giroscopio-placa
+#define sda_com A4 // pin para establacer comunicacion giroscopio-placa
 
 // Direcciones.
 #define LEFT  0 // Constante para la direccion Izquierda
@@ -26,7 +26,12 @@
 uint8_t searchDir = LEFT; //inicialmente buscará en la dirección izquierda
 
 // Configuracion del driver del motor.
-// CytronMD10C(uint8_t pwmPin, uint8_t dirPin) : CytronMD(PWM_DIR, pwmPin, dirPin)
+/************************************************************************************************ 
+ * CytronMD10C(uint8_t pwmPin, uint8_t dirPin) : CytronMD(PWM_DIR, pwmPin, dirPin)
+Modo: "de magnitud de signo" -> Necesita 2 señales separadas para controlar el motor, una es para la 
+dirección (en sentido contrario a las agujas del reloj o en el sentido de las agujas del reloj)
+y otra es para la velocidad.
+*************************************************************************************************/
 CytronMD motorL(PWM_DIR, 5, 4);  // Motor IZQUIERDO
 CytronMD motorR(PWM_DIR, 6, 7);  // Motor DERECHO 
 
@@ -262,7 +267,6 @@ void loop() {
 
   // Se detecta el borde trasero a la derecha.
   else if (analogRead(linea_trasero_der) < 500) {
-    // Retrocede y gira en U a la izquierda.
     motorL.setSpeed(122);
     motorR.setSpeed(122);
     
@@ -272,7 +276,6 @@ void loop() {
 
   // Se detecta el borde trasero a la izquierda.
   else if (analogRead(linea_trasero_der) < 500) {
-    // Retrocede y gira en U a la izquierda.
     motorL.setSpeed(122);
     motorR.setSpeed(122);
     
