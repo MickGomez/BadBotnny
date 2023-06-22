@@ -13,6 +13,8 @@ Sumobot con PID = http://aprendiendofacilelectronica.blogspot.com/2017/12/robot-
 
 ![](https://github.com/MickGomez/BadBotnny/blob/main/Bad%20Botnny%20(1).png)
 
+![](https://github.com/MickGomez/BadBotnny/blob/main/MainLogo.jpeg)
+
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo1.jpg)
 
 ![](https://github.com/MickGomez/BadBotnny/blob/main/logo2.jpg)
