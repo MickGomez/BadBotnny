@@ -139,32 +139,37 @@ void estrategias()
       }
     
 
-    if (sw == 142) // Estrategia 2 (De atrás)
+    if (sw == 142) // Estrategia 2 (de frente, pero con ataque curvilineo)
     {
-      Retardo(5000);
-      // Girar 
-      motorL.setSpeed(255);
-      motorR.setSpeed(0);
-      Retardo(200);
-      // Ir recto 
-      motorL.setSpeed(255);
-      motorR.setSpeed(255);
-      uint32_t startTimestamp = millis();
-      while (distance > 60) {
-        // Salir si el oponente no se encuentra después del tiempo de espera.
-        if (millis() - startTimestamp > 400) {
-          break;
-            }
-          }
+    Retardo(5000);
+    // Gire a la derecha alrededor de 45 grados.
+    motorL.setSpeed(255);
+    motorR.setSpeed(0);
+    // Ir recto
+    motorL.setSpeed(255);
+    motorR.setSpeed(255);
+    //delay(450);
+    Retardo(450);
+
+    // Gire a la izquierda hasta que se detecte al oponente.
+    motorL.setSpeed(0);
+    motorR.setSpeed(255);
+    uint32_t startTimestamp = millis();
+    while (distance > 60) {
+    // Salir si el oponente no se encuentra después del tiempo de espera.
+    if (millis() - startTimestamp > 400) {
+      break;
+        }
+      }
     }
 
     if (sw == 302) // Estrategia 3 (Costado derecho del sumo hacia el centro del ring)
     {
       Retardo(5000);
       // Girar 
-      motorL.setSpeed(0);
-      motorR.setSpeed(255);
-      Retardo(200);
+      motorL.setSpeed(-150);
+      motorR.setSpeed(150);
+      Retardo(100);
       // Ir recto 
       motorL.setSpeed(255);
       motorR.setSpeed(255);
@@ -181,9 +186,9 @@ void estrategias()
     {
       Retardo(5000);
       // Girar 
-      motorL.setSpeed(255);
-      motorR.setSpeed(0);
-      Retardo(200);
+      motorL.setSpeed(150);
+      motorR.setSpeed(-150);
+      Retardo(100);
       // Ir recto 
       motorL.setSpeed(255);
       motorR.setSpeed(255);
@@ -394,21 +399,31 @@ void setup() {
   motorR.setSpeed(0);
 
  // Al pulsar cualquiera de los 4 botones de estrategia, comienza la puesta en marcha despues que transcurra 5 segundos
+  /*
   sw = analogRead(pulsador);
 
   inicio();
 
-    if(inicio) {
+  if (inicio)
+  {
     estrategias();
   }
   // Al pulsar el boton de parada, paran los motores y las lecturas de los sensores
   parada();
-
+  */
 }
 
 
 void loop() {
   // put your main code here, to run repeatedly:
+  inicio();
+  if (inicio)
+  {
+    estrategias();
+  }
+  // Al pulsar el boton de parada, paran los motores y las lecturas de los sensores
+  parada();
+
 
   // Se detecta el borde izquierdo.
   if (analogRead(linea_frontal_izq) < 200) {
