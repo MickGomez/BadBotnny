@@ -12,7 +12,8 @@
 #define infra A2 // Sensor analogico frontal
 #define model 1080
 SharpIR sensor( SharpIR::GP2Y0A21YK0F, A0 );
-int distance = sensor.getDistance();
+//int distance = sensor.getDistance();
+int distance = 0;
 
 #define pulsador A3  // Botón de arranque
 int sw; // Valor de voltaje de cada boton
@@ -106,7 +107,8 @@ bool inicio()
  *******************************************************************************/
 bool parada()
 {
-    if (sw == 737)
+    // Valor tipico sw = 737
+    if (sw > 727 and sw < 747)
   {
     Serial.println("Apagado");
     Serial.println();
@@ -119,7 +121,8 @@ bool parada()
  *******************************************************************************/
 void estrategias()
 {
-    if (sw == 0) // Estrategia 1 (Frente a frente)
+    // Valor tipico sw = 0
+    if (sw < 10) // Estrategia 1 (Frente a frente)
     {
       Retardo(5000);
       // Ir recto
@@ -138,8 +141,8 @@ void estrategias()
           }
       }
     
-
-    if (sw == 142) // Estrategia 2 (de frente, pero con ataque curvilineo)
+    // Valor tipico sw = 142
+    if (sw > 132 and sw < 152) // Estrategia 2 (de frente, pero con ataque curvilineo)
     {
     Retardo(5000);
     // Gire a la derecha alrededor de 45 grados.
@@ -163,7 +166,8 @@ void estrategias()
       }
     }
 
-    if (sw == 302) // Estrategia 3 (Costado derecho del sumo hacia el centro del ring)
+    // Valor tipico sw = 302
+    if (sw > 292 and sw < 312) // Estrategia 3 (Costado derecho del sumo hacia el centro del ring)
     {
       Retardo(5000);
       // Girar 
@@ -182,7 +186,8 @@ void estrategias()
           }
     }
 
-    if (sw == 490) // Estrategia 4 (Costado izquierdo del sumo hacia el centro del ring)
+    // Valor tipico sw = 490
+    if (sw > 480 and sw < 500) // Estrategia 4 (Costado izquierdo del sumo hacia el centro del ring)
     {
       Retardo(5000);
       // Girar 
@@ -203,6 +208,7 @@ void estrategias()
 
 
 }
+
 
 /*******************************************************************************
  * Rutina de inicio
@@ -380,23 +386,22 @@ void atacar() {
 
 
 
-
 void setup() {
   // put your setup code here, to run once:
 
-  pinMode(linea_frontal_izq, INPUT_PULLUP);
-  pinMode(linea_frontal_der, INPUT_PULLUP);
+  //pinMode(linea_frontal_izq, INPUT_PULLUP);
+  //pinMode(linea_frontal_der, INPUT_PULLUP);
   //pinMode(linea_trasero, INPUT_PULLUP);
 
   pinMode(infra_diagonal_izq, INPUT_PULLUP);
   pinMode(infra_diagonal_der, INPUT_PULLUP);
-  pinMode(infra, INPUT_PULLUP);
+  //pinMode(infra, INPUT_PULLUP);
   pinMode(infra_lateral_izq, INPUT_PULLUP);
   pinMode(infra_lateral_der, INPUT_PULLUP);
 
   // Para los motores.
-  motorL.setSpeed(0);
-  motorR.setSpeed(0);
+  //motorL.setSpeed(0);
+  //motorR.setSpeed(0);
 
  // Al pulsar cualquiera de los 4 botones de estrategia, comienza la puesta en marcha despues que transcurra 5 segundos
   /*
@@ -416,12 +421,13 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  distance = sensor.getDistance();
   inicio();
   if (inicio)
   {
     estrategias();
   }
-  // Al pulsar el boton de parada, paran los motores y las lecturas de los sensores
+  // Al pulsar el boton de parada, se detienen los motores
   parada();
 
 
@@ -470,6 +476,5 @@ void loop() {
     }
   }
     // Bucle para siempre aquí.
-    while (1);
+    //while (1);
   }
-// Prueb
