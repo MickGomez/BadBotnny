@@ -6,14 +6,14 @@
 #define infra_diagonal_der 10 // Sensor infrarrojo delantero derecho
 #define infra_diagonal_izq 11 // Sensor infrarrojo delantero izquierdo
 //#define infra_frontal 12 // Sensor infrarrojo frontal
-#define infra_lateral_der 13 // Sensor lateral derecho
-#define infra_lateral_izq 14 // Sensor lateral izquierdo
+#define infra_lateral_der 12 // Sensor lateral derecho
+#define infra_lateral_izq 13 // Sensor lateral izquierdo
 
-#define infra A2 // Sensor analogico frontal
-#define model 1080
-SharpIR sensor( SharpIR::GP2Y0A21YK0F, A0 );
+//#define infra A2 // Sensor analogico frontal
+//#define model 1080
+SharpIR sensor( SharpIR::GP2Y0A21YK0F, A2 );
 //int distance = sensor.getDistance();
-int distance = 0;
+int distance;
 
 #define pulsador A3  // Botón de arranque
 int sw; // Valor de voltaje de cada boton
@@ -65,7 +65,7 @@ void Retardo(unsigned long tiempo) {
  *******************************************************************************/
 bool inicio()
 {
-  if (sw == 0)
+  if (sw < 10)
   {
     Retardo(5000);
     Serial.println("Encendido y estrategia 1");
@@ -74,7 +74,7 @@ bool inicio()
   }
 
 
-    if (sw == 142)
+    else if (sw > 132 and sw < 152)
   {
     Retardo(5000);
     Serial.println("Encendido y estrategia 2");
@@ -83,7 +83,7 @@ bool inicio()
   }
 
 
-    if (sw == 302)
+    else if (sw > 292 and sw < 312)
   {
     Retardo(5000);
     Serial.println("Encendido y estrategia 3");
@@ -92,13 +92,14 @@ bool inicio()
   }
 
 
-    if (sw == 490)
+    else if (sw > 480 and sw < 500)
   {
     Retardo(5000);
     Serial.println("Encendido y estrategia 4");
     Serial.println();
     return encendido = true;
   }
+
 }
 
 
@@ -112,6 +113,8 @@ bool parada()
   {
     Serial.println("Apagado");
     Serial.println();
+    motorL.setSpeed(0);
+    motorR.setSpeed(0);
     return encendido = false;
   }
 }
@@ -121,6 +124,8 @@ bool parada()
  *******************************************************************************/
 void estrategias()
 {
+  if (encendido == true)
+  {
     // Valor tipico sw = 0
     if (sw < 10) // Estrategia 1 (Frente a frente)
     {
@@ -128,12 +133,14 @@ void estrategias()
       // Ir recto
       motorL.setSpeed(255);
       motorR.setSpeed(255);
+      Serial.println("Avance Recto");
       Retardo(450);
       // Gire a la izquierda hasta que se detecte al oponente.
       motorL.setSpeed(0);
       motorR.setSpeed(255);
+      Serial.println("Giro a la izquierda");
       uint32_t startTimestamp = millis();
-      while (distance > 60) {
+      while (distance > 50) {
         // Salir si el oponente no se encuentra después del tiempo de espera.
         if (millis() - startTimestamp > 400) {
           break;
@@ -146,19 +153,23 @@ void estrategias()
     {
     Retardo(5000);
     // Gire a la derecha alrededor de 45 grados.
+    Serial.println("Giro a la derecha 45 grados");
     motorL.setSpeed(255);
     motorR.setSpeed(0);
+    Retardo(180);
     // Ir recto
+    Serial.println("Avance Recto");
     motorL.setSpeed(255);
     motorR.setSpeed(255);
     //delay(450);
     Retardo(450);
 
     // Gire a la izquierda hasta que se detecte al oponente.
+    Serial.println("Gire a la izquierda hasta que se detecte al oponente");
     motorL.setSpeed(0);
     motorR.setSpeed(255);
     uint32_t startTimestamp = millis();
-    while (distance > 60) {
+    while (distance > 50) {
     // Salir si el oponente no se encuentra después del tiempo de espera.
     if (millis() - startTimestamp > 400) {
       break;
@@ -178,7 +189,7 @@ void estrategias()
       motorL.setSpeed(255);
       motorR.setSpeed(255);
       uint32_t startTimestamp = millis();
-      while (distance > 60) {
+      while (distance > 50) {
         // Salir si el oponente no se encuentra después del tiempo de espera.
         if (millis() - startTimestamp > 400) {
           break;
@@ -198,7 +209,7 @@ void estrategias()
       motorL.setSpeed(255);
       motorR.setSpeed(255);
       uint32_t startTimestamp = millis();
-      while (distance > 60) {
+      while (distance > 50) {
         // Salir si el oponente no se encuentra después del tiempo de espera.
         if (millis() - startTimestamp > 400) {
           break;
@@ -208,6 +219,7 @@ void estrategias()
 
 
 }
+}
 
 
 /*******************************************************************************
@@ -216,6 +228,8 @@ void estrategias()
  *******************************************************************************/
 void RutinaInicial() {
  // Retardo al inicio
+ if (encendido == true)
+ {
   Retardo(5000);
 
   // Gire a la derecha alrededor de 45 grados.
@@ -234,7 +248,7 @@ void RutinaInicial() {
   motorL.setSpeed(0);
   motorR.setSpeed(255);
   uint32_t startTimestamp = millis();
-  while (distance > 60) {
+  while (distance > 50) {
     // Salir si el oponente no se encuentra después del tiempo de espera.
     if (millis() - startTimestamp > 400) {
       break;
@@ -242,13 +256,17 @@ void RutinaInicial() {
   }
   
  }
-
+}
 
 /*******************************************************************************
  * Retroceder
  * Esta función debe llamarse cuando se detecta el borde del anillo.
  *******************************************************************************/
 void Retroceder(uint8_t dir) {
+
+  if (encendido == true)
+  {
+    Serial.println("Retrocede");
   // Parar los motores.
   motorL.setSpeed(0);
   motorR.setSpeed(0);
@@ -269,9 +287,11 @@ void Retroceder(uint8_t dir) {
 
   // Girar.
   if (dir == LEFT) {
+    Serial.println("Giro a la izquierda");
     motorL.setSpeed(-150);
     motorR.setSpeed(150);
   } else {
+    Serial.println("Giro a la derecha");
     motorL.setSpeed(150);
     motorR.setSpeed(-150);
   }
@@ -283,7 +303,7 @@ void Retroceder(uint8_t dir) {
   uint32_t uTurnTimestamp = millis();
   while (millis() - uTurnTimestamp < 300) {
     // El oponente se detecta si se activa cualquiera de los sensores del oponente.
-    if ( (distance < 60) ||
+    if ( (distance < 50) ||
          !digitalRead(infra_diagonal_der) ||
          !digitalRead(infra_diagonal_izq) ||
          !digitalRead(infra_lateral_der) ||
@@ -306,12 +326,15 @@ void Retroceder(uint8_t dir) {
   //delay(200);
   Retardo(200);
 }
-
+}
 
 /*******************************************************************************
  * Buscar
  *******************************************************************************/
 void buscar() {
+  if (encendido == true)
+  {
+    Serial.println("busca");
   // Mover en movimiento circular.
   if (searchDir == LEFT) {
     motorL.setSpeed(100);
@@ -321,7 +344,7 @@ void buscar() {
     motorR.setSpeed(100);
   }
 }
-
+}
 
 /*******************************************************************************
  * Atacar
@@ -329,6 +352,9 @@ void buscar() {
  * No hacer nada si el oponente no se encuentra.
  *******************************************************************************/
 void atacar() {
+  if (encendido == true)
+  {
+    Serial.println("ataca");
   uint32_t attackTimestamp = millis();
 
   // Oponente en el centro delantero.
@@ -337,7 +363,7 @@ void atacar() {
     motorL.setSpeed(255);
     motorR.setSpeed(255);
   } */
-  if (distance < 60)
+  if (distance < 50)
   {
     motorL.setSpeed(255);
     motorR.setSpeed(255);
@@ -361,7 +387,7 @@ void atacar() {
   else if (digitalRead(infra_lateral_izq)) {
     motorL.setSpeed(-150);
     motorR.setSpeed(150);
-    while (distance > 60) {
+    while (distance > 50) {
       // Abandonar si no se encuentra al oponente después de un tiempo de espera.
       if (millis() - attackTimestamp > 400) {
         break;
@@ -374,7 +400,7 @@ void atacar() {
   else if (digitalRead(infra_lateral_der) ) {
     motorL.setSpeed(150);
     motorR.setSpeed(-150);
-    while (distance > 60) {
+    while (distance > 50) {
       // Abandonar si no se encuentra al oponente después de un tiempo de espera.
       if (millis() - attackTimestamp > 400) {
         break;
@@ -383,12 +409,62 @@ void atacar() {
   }
   
 }
+}
 
+void sensores() {
+  if (encendido == true)
+  {
+if (analogRead(linea_frontal_izq) < 200) {
+    // Retrocede y gira en U a la derecha..
+    Serial.println("Retrocede hacia la derecha");
+    Retroceder(RIGHT);
 
+    // Cambiar la dirección de búsqueda.
+    searchDir ^= 1;
+  }
+  
+  // Se detecta el borde a la derecha.
+  else if (analogRead(linea_frontal_der) < 200) {
+    // Retrocede y gira en U a la izquierda.
+    Serial.println("Retrocede hacia la izquierda");
+    Retroceder(LEFT);
+    
+    // Cambiar la dirección de búsqueda.
+    searchDir ^= 1;
+  }
+
+  // Se detecta el borde trasero
+  /*else if (analogRead(linea_trasero) < 200) {
+    motorL.setSpeed(122);
+    motorR.setSpeed(122);
+    
+    // Cambiar la dirección de búsqueda.
+    searchDir ^= 1;
+  }*/
+
+  
+  // No se detecta el borde.
+  else {
+    // Seguir buscando si no se detecta al oponente.
+    if ( (distance > 50) &&
+         !digitalRead(infra_diagonal_der) &&
+         !digitalRead(infra_diagonal_izq) &&
+         !digitalRead(infra_lateral_der) &&
+         !digitalRead(infra_lateral_izq) ) {
+      buscar();
+    }
+    
+    // Atacar si el oponente está a la vista.
+    else {
+      atacar();
+    }
+  }
+}
+}
 
 void setup() {
   // put your setup code here, to run once:
-
+  Serial.begin(9600);
   //pinMode(linea_frontal_izq, INPUT_PULLUP);
   //pinMode(linea_frontal_der, INPUT_PULLUP);
   //pinMode(linea_trasero, INPUT_PULLUP);
@@ -421,60 +497,19 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  sw = analogRead(pulsador);
   distance = sensor.getDistance();
   inicio();
   if (inicio)
   {
     estrategias();
+    sensores();
   }
   // Al pulsar el boton de parada, se detienen los motores
   parada();
 
-
-  // Se detecta el borde izquierdo.
-  if (analogRead(linea_frontal_izq) < 200) {
-    // Retrocede y gira en U a la derecha..
-    Retroceder(RIGHT);
-
-    // Cambiar la dirección de búsqueda.
-    searchDir ^= 1;
-  }
   
-  // Se detecta el borde a la derecha.
-  else if (analogRead(linea_frontal_der) < 200) {
-    // Retrocede y gira en U a la izquierda.
-    Retroceder(LEFT);
-    
-    // Cambiar la dirección de búsqueda.
-    searchDir ^= 1;
-  }
-
-  // Se detecta el borde trasero
-  /*else if (analogRead(linea_trasero) < 200) {
-    motorL.setSpeed(122);
-    motorR.setSpeed(122);
-    
-    // Cambiar la dirección de búsqueda.
-    searchDir ^= 1;
-  }*/
-
-  
-  // No se detecta el borde.
-  else {
-    // Seguir buscando si no se detecta al oponente.
-    if ( (distance > 60) &&
-         !digitalRead(infra_diagonal_der) &&
-         !digitalRead(infra_diagonal_izq) &&
-         !digitalRead(infra_lateral_der) &&
-         !digitalRead(infra_lateral_izq) ) {
-      buscar();
-    }
-    
-    // Atacar si el oponente está a la vista.
-    else {
-      atacar();
-    }
-  }
     // Bucle para siempre aquí.
     //while (1);
   }
+
