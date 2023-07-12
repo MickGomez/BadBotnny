@@ -129,7 +129,6 @@ void estrategias()
     // Valor tipico sw = 0
     if (sw < 10) // Estrategia 1 (Frente a frente)
     {
-      Retardo(5000);
       // Ir recto
       motorL.setSpeed(255);
       motorR.setSpeed(255);
@@ -151,7 +150,6 @@ void estrategias()
     // Valor tipico sw = 142
     if (sw > 132 and sw < 152) // Estrategia 2 (de frente, pero con ataque curvilineo)
     {
-    Retardo(5000);
     // Gire a la derecha alrededor de 45 grados.
     Serial.println("Giro a la derecha 45 grados");
     motorL.setSpeed(255);
@@ -180,7 +178,6 @@ void estrategias()
     // Valor tipico sw = 302
     if (sw > 292 and sw < 312) // Estrategia 3 (Costado derecho del sumo hacia el centro del ring)
     {
-      Retardo(5000);
       // Girar 
       motorL.setSpeed(-150);
       motorR.setSpeed(150);
@@ -200,7 +197,6 @@ void estrategias()
     // Valor tipico sw = 490
     if (sw > 480 and sw < 500) // Estrategia 4 (Costado izquierdo del sumo hacia el centro del ring)
     {
-      Retardo(5000);
       // Girar 
       motorL.setSpeed(150);
       motorR.setSpeed(-150);
